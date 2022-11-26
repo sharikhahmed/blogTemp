@@ -29,14 +29,14 @@ export const authOptions: NextAuthOptions = {
     }),
     EmailProvider({
       server: {
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT),
+        host: process.env.EMAIL_SERVER_HOST,
+        port: Number(process.env.EMAIL_SERVER_PORT),
         auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
+          user: process.env.EMAIL_SERVER_USER ,
+          pass: process.env.EMAIL_SERVER_PASSWORD
         },
       },
-      from: process.env.SMTP_FROM,
+      from: process.env.EMAIL_FROM,
       // sendVerificationRequest: async ({ identifier, url, provider }) => {
       //   const user = await db.user.findUnique({
       //     where: {

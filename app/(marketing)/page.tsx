@@ -43,8 +43,7 @@ export default async function IndexPage() {
             Private Blogs
           </h1>
           <p className="max-w-[42rem] leading-normal text-slate-700 sm:text-xl sm:leading-8">
-            I&apos;m building a web app with Next.js 13 and open sourcing
-            everything. Follow along as we figure this out together.
+            Share your blogs safely and with only the people you trust. Create private blogs and ask folks to requests access
           </p>
         </div>
         <div className="flex gap-4">
@@ -103,7 +102,7 @@ export default async function IndexPage() {
               <div className="space-y-2">
                 <h3 className="font-bold text-slate-100">Database</h3>
                 <p className="text-sm text-slate-100">
-                  ORM using Prisma and deployed on PlanetScale.
+                  ORM using Prisma and deployed on MongoDB.
                 </p>
               </div>
             </div>

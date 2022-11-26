@@ -1,9 +1,9 @@
 import { SiteConfig } from "types"
 
 export const siteConfig: SiteConfig = {
-  name: "Taxonomy",
+  name: "Bloggers",
   links: {
     twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/taxonomy",
+    github: "https://github.com/sharikhahmed/blogTemp",
   },
 }
