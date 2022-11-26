@@ -102,7 +102,7 @@ export default async function IndexPage() {
               <div className="space-y-2">
                 <h3 className="font-bold text-slate-100">Database</h3>
                 <p className="text-sm text-slate-100">
-                  ORM using Prisma and deployed on PlanetScale.
+                  ORM using Prisma and deployed on MongoDB.
                 </p>
               </div>
             </div>
