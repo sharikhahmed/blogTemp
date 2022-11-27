@@ -11,6 +11,7 @@ import { authOptions } from "@/lib/auth"
 const postCreateSchema = z.object({
   title: z.string().optional(),
   content: z.string().optional(),
+  private: z.boolean().default(false)
 })
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -67,6 +68,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           title: body.title,
           content: body.content,
           authorId: session.user.id,
+          private: body.private
         },
         select: {
           id: true,
