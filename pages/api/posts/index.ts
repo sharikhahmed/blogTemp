@@ -4,7 +4,7 @@ import { unstable_getServerSession } from "next-auth/next"
 
 import { db } from "@/lib/db"
 import { withMethods } from "@/lib/api-middlewares/with-methods"
-import { getUserSubscriptionPlan } from "@/lib/subscription"
+// import { getUserSubscriptionPlan } from "@/lib/subscription"
 import { RequiresProPlanError } from "@/lib/exceptions"
 import { authOptions } from "@/lib/auth"
 
@@ -45,21 +45,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "POST") {
     try {
-      const subscriptionPlan = await getUserSubscriptionPlan(user.id)
+      // const subscriptionPlan = await getUserSubscriptionPlan(user.id)
 
       // If user is on a free plan.
       // Check if user has reached limit of 3 posts.
-      if (!subscriptionPlan?.isPro) {
-        const count = await db.post.count({
-          where: {
-            authorId: user.id,
-          },
-        })
+      // if (!subscriptionPlan?.isPro) {
+      //   const count = await db.post.count({
+      //     where: {
+      //       authorId: user.id,
+      //     },
+      //   })
 
-        if (count >= 3) {
-          throw new RequiresProPlanError()
-        }
-      }
+      //   if (count >= 3) {
+      //     throw new RequiresProPlanError()
+      //   }
+      // }
 
       const body = postCreateSchema.parse(req.body)
 
