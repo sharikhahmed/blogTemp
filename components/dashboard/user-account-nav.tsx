@@ -48,7 +48,7 @@ export function UserAccountNav({ user }: UserAccountNavProps) {
           </DropdownMenu.Item>
           <DropdownMenu.Separator />
           <DropdownMenu.Item>
-            <Link href="/docs" target="_blank" className="w-full">
+            <Link href="/" target="_blank" className="w-full">
               Documentation
             </Link>
           </DropdownMenu.Item>
