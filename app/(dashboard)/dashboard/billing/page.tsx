@@ -16,16 +16,16 @@ export default async function BillingPage() {
     redirect(authOptions.pages.signIn)
   }
 
-  const subscriptionPlan = await getUserSubscriptionPlan(user.id)
+  // const subscriptionPlan = await getUserSubscriptionPlan(user.id)
 
   // If user has a pro plan, check cancel status on Stripe.
-  let isCanceled = false
-  if (subscriptionPlan.isPro) {
-    const stripePlan = await stripe.subscriptions.retrieve(
-      subscriptionPlan.stripeSubscriptionId
-    )
-    isCanceled = stripePlan.cancel_at_period_end
-  }
+  // let isCanceled = false
+  // if (subscriptionPlan.isPro) {
+  //   const stripePlan = await stripe.subscriptions.retrieve(
+  //     subscriptionPlan.stripeSubscriptionId
+  //   )
+  //   isCanceled = stripePlan.cancel_at_period_end
+  // }
 
   return (
     <DashboardShell>
@@ -34,12 +34,12 @@ export default async function BillingPage() {
         text="Manage billing and your subscription plan."
       />
       <div className="grid gap-10">
-        <BillingForm
+        {/* <BillingForm
           subscriptionPlan={{
             ...subscriptionPlan,
             isCanceled,
           }}
-        />
+        /> */}
         <Card>
           <Card.Header>
             <Card.Title>Note</Card.Title>

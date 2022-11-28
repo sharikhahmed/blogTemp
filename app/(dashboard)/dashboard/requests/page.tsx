@@ -43,11 +43,11 @@ export default async function SettingsPage() {
                             {true && (
                                 <p className="text-slate-600">{"description of request will come here once i add the feature"}</p>
                             )}
-                            {request.createdAt && (
+                            {/* {request.createdAt && (
                                 <p className="text-sm text-slate-600">
                                     {formatDate(request.createdAt.toString())}
                                 </p>
-                            )}
+                            )} */}
                             {/* TODO: add slug for href once you build slug feature */}
                             <div className="grid grid-cols-2 gap-6">
                                 <RejectReqBtn reqId={request.id} />

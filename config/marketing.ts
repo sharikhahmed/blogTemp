@@ -12,7 +12,8 @@ export const marketingConfig: MarketingConfig = {
     },
     {
       title: "Requests",
-      href: "/requests"
+      href: "/requests" ,
+      disabled: true
     },
   ],
 }
