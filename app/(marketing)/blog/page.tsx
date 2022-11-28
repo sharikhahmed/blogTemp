@@ -1,17 +1,29 @@
 import Link from "next/link"
 import { compareDesc } from "date-fns"
 import { allPosts } from "contentlayer/generated"
-
 import { formatDate } from "@/lib/utils"
-import Image from "next/image"
 import BuildButton from "@/components/editor/BuildButton"
+import { db } from "@/lib/db"
+import RequestAccessBtn from "@/components/marketing/RequestAccessBtn"
+import { getCurrentUser } from "@/lib/session"
 
 export default async function BlogPage() {
-  const posts = allPosts
-    .filter((post) => post.published)
-    .sort((a, b) => {
-      return compareDesc(new Date(a.date), new Date(b.date))
-    })
+  // const posts = allPosts
+  //   .filter((post) => post.published) 
+  //   .sort((a, b) => {
+  //     return compareDesc(new Date(a.date), new Date(b.date))
+  //   })
+
+  const posts = await db.post.findMany({
+    where: {
+      // TODO: make this to published true
+      published: false
+    },
+    include: {
+      Request: true
+    }
+  })
+  const user = await getCurrentUser()
 
   return (
     <div className="container max-w-4xl py-6 lg:py-10">
@@ -29,35 +41,45 @@ export default async function BlogPage() {
       <hr className="my-8 border-slate-200" />
       {posts?.length ? (
         <div className="grid gap-10 sm:grid-cols-2">
-          {posts.map((post, index) => (
-            <article
-              key={post._id}
+          {posts.map((post, index) => {
+            // only one request per user for a blog can be sent, its safe to extract the first element
+            const request = post.Request.filter(r => r.userId === user.id)[0]
+            return <article
+              key={post.id}
               className="group relative flex flex-col space-y-2"
             >
-              {post.image && (
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  width={804}
-                  height={452}
-                  className="rounded-md border border-slate-200 bg-slate-200 transition-colors group-hover:border-slate-900"
-                  priority={index <= 1}
-                />
-              )}
+              {/* TODO: will add support for images later */}
+              {/* {post.image && (
+              <Image
+                src={post.image}
+                alt={post.title}
+                width={804}
+                height={452}
+                className="rounded-md border border-slate-200 bg-slate-200 transition-colors group-hover:border-slate-900"
+                priority={index <= 1}
+              />
+            )} */}
               <h2 className="text-2xl font-extrabold">{post.title}</h2>
-              {post.description && (
-                <p className="text-slate-600">{post.description}</p>
+              {true && (
+                <p className="text-slate-600">{"description of post will come here once i add the feature"}</p>
               )}
-              {post.date && (
+              {post.createdAt && (
                 <p className="text-sm text-slate-600">
-                  {formatDate(post.date)}
+                  {formatDate(post.createdAt.toString())}
                 </p>
               )}
-              <Link href={post.slug} className="absolute inset-0">
+              {/* TODO: add slug for href once you build slug feature */}
+              {post.private ? <div className="grid grid-cols-2 gap-6">
+                {request ? <Link href={`${request.approved ? `/blog/${post.id}` : "/blog"}`} className="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+                  {request.approved ? "Approved! Read Blog" : "Request Denied!"}
+                </Link> : <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Private</button>}
+                <RequestAccessBtn userId={user.id} blogId={post.id} />
+              </div> : <Link href={`/blog/${post.id}`}>
                 <span className="sr-only">View Article</span>
-              </Link>
+                <button type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Read blog</button>
+              </Link>}
             </article>
-          ))}
+          })}
         </div>
       ) : (
         <p>No posts published.</p>

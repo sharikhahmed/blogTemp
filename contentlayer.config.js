@@ -32,6 +32,10 @@ export const Doc = defineDocumentType(() => ({
       type: "boolean",
       default: true,
     },
+    private: {
+      type: "boolean", 
+      default: false
+    }
   },
   computedFields,
 }))
