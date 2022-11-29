@@ -18,20 +18,9 @@ export function PostCreateButton({
   const router = useRouter()
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [showModal, setShowModal] = React.useState(false)
-  const [isPrivateBlog, setIsPrivateBlog] = React.useState(false)
+  const isPrivateBlog = React.useRef(false);
 
-
-  React.useEffect(() => {
-    const fun = () => {
-      console.log("this will run intailly??")
-    }
-    fun()
-    return () => {
-      
-    }
-  }, [isPrivateBlog])
-  
-  const postBlog = async () => {
+    async function postBlog ()  {
     setIsLoading(true)
 
     const response = await fetch("/api/posts", {
@@ -41,8 +30,7 @@ export function PostCreateButton({
       },
       body: JSON.stringify({
         title: "Untitled Post",
-        // todo it will always create a new private blog i have to fix this later as i have spent good time on it 
-        private: !isPrivateBlog
+        private: isPrivateBlog
       }),
     })
 
@@ -70,10 +58,6 @@ export function PostCreateButton({
     router.refresh()
 
     router.push(`/editor/${post.id}`)
-  }
-
-  const changePrivateValue = (value: boolean) =>  {
-      setIsPrivateBlog(value)
   }
 
   return (
@@ -108,7 +92,7 @@ export function PostCreateButton({
           <Alert.Footer>
             <Alert.Action onClick={async (event) => {
               event.preventDefault()
-              changePrivateValue(false)
+              isPrivateBlog.current = false
               await postBlog()
             }}>
               {isLoading && (
@@ -119,8 +103,7 @@ export function PostCreateButton({
             <Alert.Action
               onClick={async (event) => {
                 event.preventDefault()
-                changePrivateValue(true)
-                console.log("setIsPrivateBlog", isPrivateBlog)
+                isPrivateBlog.current = true
                 await postBlog()
               }}
               className="bg-red-600 focus:ring-red-600"
