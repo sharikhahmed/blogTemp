@@ -46,10 +46,11 @@ export default async function BillingPage() {
           </Card.Header>
           <Card.Content className="space-y-4 pb-6 text-sm">
             <p>
-              Bloggers app is a demo app using a Stripe test environment.{" "}
+              {/* Bloggers app is a demo app using a Stripe test environment.{" "}
               <strong>
                 You can test the upgrade and won&apos;t be charged.
-              </strong>
+              </strong> */}
+              <strong>Stripe integration is on going</strong>
             </p>
             <p>
               You can find a list of test card numbers on the{" "}
