@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { Client } from "postmark"
 
 import { db } from "@/lib/db"
+import Credentials from "next-auth/providers/credentials"
 
 // const postmarkClient = new Client(process.env.POSTMARK_API_TOKEN)
 
@@ -23,58 +24,36 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   providers: [
-    GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    }),
-    EmailProvider({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: Number(process.env.EMAIL_SERVER_PORT),
-        auth: {
-          user: process.env.EMAIL_SERVER_USER ,
-          pass: process.env.EMAIL_SERVER_PASSWORD
-        },
+    Credentials({
+      name: "Why should i importhis", 
+      credentials: {
+        email: { label: "email", type: "email", placeholder: "test@email.com" },
+        password: { label: "Password", type: "password" }
       },
-      from: process.env.EMAIL_FROM,
-      // sendVerificationRequest: async ({ identifier, url, provider }) => {
-      //   const user = await db.user.findUnique({
-      //     where: {
-      //       email: identifier,
-      //     },
-      //     select: {
-      //       emailVerified: true,
-      //     },
-      //   })
+      async authorize(credentials, req) {
+        console.log("credential req data", {credentials, req})
+        // Add logic here to look up the user from the credentials supplied
+        // const user = { id: "1", name: "J Smith", email: "jsmith@example.com" }
+        const user = await db.user.findFirst({
+          where: {
+            email: credentials.email
+          }
+        })
 
-      //   const result = await postmarkClient.sendEmailWithTemplate({
-      //     TemplateId: user?.emailVerified
-      //       ? POSTMARK_SIGN_IN_TEMPLATE
-      //       : POSTMARK_ACTIVATION_TEMPLATE,
-      //     To: identifier,
-      //     From: provider.from,
-      //     TemplateModel: {
-      //       action_url: url,
-      //       product_name: "Taxonomy",
-      //     },
-      //     Headers: [
-      //       {
-      //         // Set this to prevent Gmail from threading emails.
-      //         // See https://stackoverflow.com/questions/23434110/force-emails-not-to-be-grouped-into-conversations/25435722.
-      //         Name: "X-Entity-Ref-ID",
-      //         Value: new Date().getTime() + "",
-      //       },
-      //     ],
-      //   })
+        console.log("user ==", {user})
+  
+        if (user) {
+          return user
+        } else {
+          throw new Error("User not found, if you don't have a account signup first")
 
-      //   if (result.ErrorCode) {
-      //     throw new Error(result.Message)
-      //   }
-      // },
-    }),
+        }
+      }
+    })
   ],
   callbacks: {
     async session({ token, session }) {
+      console.log("token == ", token)
       if (token) {
         session.user.id = token.id
         session.user.name = token.name
