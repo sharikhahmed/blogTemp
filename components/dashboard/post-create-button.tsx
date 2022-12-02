@@ -30,7 +30,7 @@ export function PostCreateButton({
       },
       body: JSON.stringify({
         title: "Untitled Post",
-        private: isPrivateBlog
+        private: isPrivateBlog.current
       }),
     })
 
